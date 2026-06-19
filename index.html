@@ -717,6 +717,25 @@
       text-transform: uppercase;
     }
 
+    footer ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    footer ul li {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+    }    
+
+    footer ul li img {
+        width: 6%;
+        height: 6%;
+        filter: invert(1);
+    }
+
     @media (max-width: 920px) {
       .hero {
         grid-template-columns: 1fr;
@@ -963,7 +982,24 @@
 
     <footer id="contact">
       <div>© 2026 XFTXR Hours</div>
-      <div><!-- add your email or social links here --></div>
+      <div>
+        <p>XFTXR HOURS<br>
+        END OF TRANSMISSION</p>
+        <br>
+        <br>
+        <p>See you tomorrow night.</p>
+        <br>
+        <ul>
+            <li>
+                <img src="moon.png" alt="">
+                Jinru — Idle
+            </li>
+            <li>
+                <img src="do-not-disturb.png" alt="">
+                Rinpi — Do Not Disturb
+            </li>
+        </ul>
+      </div>
     </footer>
   </div>
 
