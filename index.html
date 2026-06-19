@@ -1,0 +1,876 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Product Portfolio</title>
+
+  <style>
+    :root {
+      --black: #030607;
+      --deep-black: #000000;
+      --dark-green: #071b17;
+      --green: #72ffb5;
+      --soft-green: #9dffd2;
+      --purple: #9b5cff;
+      --soft-purple: #c29cff;
+      --white: #f3fff8;
+      --muted: #8aa39a;
+      --panel: rgba(6, 18, 18, 0.82);
+      --border: rgba(114, 255, 181, 0.22);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      min-height: 100vh;
+      font-family: "Courier New", monospace;
+      color: var(--white);
+      background:
+        radial-gradient(circle at 20% 15%, rgba(155, 92, 255, 0.18), transparent 28%),
+        radial-gradient(circle at 85% 35%, rgba(114, 255, 181, 0.13), transparent 26%),
+        linear-gradient(180deg, #061111 0%, #020606 45%, #000 100%);
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background:
+        linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+      background-size: 28px 28px;
+      opacity: 0.25;
+      z-index: 1;
+    }
+
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background:
+        repeating-linear-gradient(
+          to bottom,
+          rgba(255,255,255,0.025) 0px,
+          rgba(255,255,255,0.025) 1px,
+          transparent 2px,
+          transparent 5px
+        );
+      mix-blend-mode: screen;
+      opacity: 0.16;
+      z-index: 3;
+    }
+
+    .city-bg {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      overflow: hidden;
+      opacity: 0.85;
+    }
+
+    .building {
+      position: absolute;
+      bottom: 0;
+      background: linear-gradient(180deg, #0b2022, #020707);
+      border: 1px solid rgba(114, 255, 181, 0.08);
+      box-shadow: inset 0 0 35px rgba(0,0,0,0.8);
+    }
+
+    .building.one {
+      width: 17vw;
+      height: 64vh;
+      left: 2vw;
+    }
+
+    .building.two {
+      width: 25vw;
+      height: 48vh;
+      left: 18vw;
+      background: linear-gradient(180deg, #10212c, #020707);
+    }
+
+    .building.three {
+      width: 21vw;
+      height: 70vh;
+      right: 8vw;
+    }
+
+    .building.four {
+      width: 18vw;
+      height: 38vh;
+      right: 0;
+      background: linear-gradient(180deg, #120f20, #020707);
+    }
+
+    .windows {
+      position: absolute;
+      inset: 32px 20px;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px 14px;
+      opacity: 0.38;
+    }
+
+    .windows span {
+      height: 18px;
+      background: rgba(114, 255, 181, 0.15);
+      box-shadow: 0 0 15px rgba(114, 255, 181, 0.18);
+    }
+
+    .windows span:nth-child(3n) {
+      background: rgba(155, 92, 255, 0.18);
+      box-shadow: 0 0 15px rgba(155, 92, 255, 0.2);
+    }
+
+    .windows span:nth-child(5n) {
+      background: rgba(255,255,255,0.22);
+      box-shadow: 0 0 18px rgba(255,255,255,0.16);
+    }
+
+    .street {
+      position: fixed;
+      left: -10%;
+      right: -10%;
+      bottom: -10vh;
+      height: 34vh;
+      background:
+        linear-gradient(90deg, transparent, rgba(114,255,181,0.06), transparent),
+        linear-gradient(180deg, #061312, #020303);
+      transform: skewY(-5deg);
+      z-index: 0;
+      border-top: 1px solid rgba(114, 255, 181, 0.1);
+    }
+
+    .lamp {
+      position: absolute;
+      bottom: 16vh;
+      width: 6px;
+      height: 210px;
+      background: #071514;
+      z-index: 1;
+    }
+
+    .lamp::before {
+      content: "";
+      position: absolute;
+      top: -10px;
+      left: -18px;
+      width: 42px;
+      height: 14px;
+      background: #0a1918;
+      border-radius: 12px;
+    }
+
+    .lamp::after {
+      content: "";
+      position: absolute;
+      top: -18px;
+      left: -42px;
+      width: 90px;
+      height: 90px;
+      background: radial-gradient(circle, rgba(114,255,181,0.72) 0%, rgba(114,255,181,0.2) 34%, transparent 72%);
+      filter: blur(4px);
+      animation: flicker 4s infinite;
+    }
+
+    .lamp.a {
+      left: 8vw;
+      animation-delay: 0.3s;
+    }
+
+    .lamp.b {
+      right: 14vw;
+      height: 170px;
+      bottom: 12vh;
+    }
+
+    .lamp.b::after {
+      background: radial-gradient(circle, rgba(155,92,255,0.75) 0%, rgba(155,92,255,0.22) 35%, transparent 72%);
+      animation-delay: 1.2s;
+    }
+
+    .lamp.c {
+      left: 49vw;
+      height: 145px;
+      bottom: 10vh;
+    }
+
+    .lamp.c::after {
+      background: radial-gradient(circle, rgba(255,255,255,0.68) 0%, rgba(114,255,181,0.16) 34%, transparent 72%);
+      animation-delay: 2.2s;
+    }
+
+    @keyframes flicker {
+      0%, 18%, 22%, 25%, 53%, 57%, 100% {
+        opacity: 0.95;
+        transform: scale(1);
+      }
+      20%, 24%, 55% {
+        opacity: 0.25;
+        transform: scale(0.92);
+      }
+      56% {
+        opacity: 0.55;
+      }
+    }
+
+    .page {
+      position: relative;
+      z-index: 2;
+      width: min(1180px, 92%);
+      margin: auto;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 28px 0;
+      border-bottom: 1px solid rgba(114,255,181,0.18);
+    }
+    
+    .logo {
+        display: inline-flex;
+        align-items: center;
+        text-decoration: none;
+    }
+
+    .logo img {
+        width: 170px;
+        max-width: 100%;
+        height: auto;
+        display: block;
+        filter:
+            drop-shadow(2px 0 0 rgba(114,255,181,0.65))
+            drop-shadow(-2px 0 0 rgba(155,92,255,0.65))
+            drop-shadow(0 0 16px rgba(114,255,181,0.35));
+        animation: logoFlicker 4.5s infinite;
+    }
+
+    @keyframes logoFlicker {
+        0%, 18%, 22%, 25%, 53%, 57%, 100% {
+            opacity: 1;
+            transform: translate(0, 0);
+        }
+
+        20%, 24%, 55% {
+            opacity: 0.65;
+            transform: translate(1px, -1px);
+        }
+
+        56% {
+            opacity: 0.85;
+            transform: translate(-1px, 1px);
+        }
+    }
+
+    .hero-logo {
+        width: 260px;
+        max-width: 100%;
+        margin-bottom: 24px;
+        filter:
+            drop-shadow(3px 0 0 rgba(114,255,181,0.7))
+            drop-shadow(-3px 0 0 rgba(155,92,255,0.7))
+            drop-shadow(0 0 26px rgba(155,92,255,0.35));
+    }
+
+    nav {
+      display: flex;
+      gap: 24px;
+      font-size: 12px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    nav a {
+      color: var(--muted);
+      text-decoration: none;
+      transition: 0.25s;
+    }
+
+    nav a:hover {
+      color: var(--soft-purple);
+      text-shadow: 0 0 10px var(--purple);
+    }
+
+    .hero {
+      min-height: 78vh;
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      align-items: center;
+      gap: 48px;
+      padding: 80px 0;
+    }
+
+    .tag {
+      color: var(--soft-purple);
+      font-size: 12px;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+    }
+
+    h1 {
+      font-size: clamp(42px, 8vw, 96px);
+      line-height: 0.9;
+      letter-spacing: -4px;
+      text-transform: uppercase;
+      text-shadow:
+        3px 0 rgba(155,92,255,0.7),
+        -3px 0 rgba(114,255,181,0.5),
+        0 0 38px rgba(114,255,181,0.18);
+      animation: glitchTitle 5s infinite;
+    }
+
+    @keyframes glitchTitle {
+      0%, 92%, 100% {
+        transform: translate(0);
+      }
+      93% {
+        transform: translate(2px, -1px);
+      }
+      94% {
+        transform: translate(-3px, 1px);
+      }
+      95% {
+        transform: translate(1px, 2px);
+      }
+    }
+
+    .hero p {
+      max-width: 560px;
+      color: #b8cec7;
+      margin-top: 24px;
+      line-height: 1.8;
+      font-size: 15px;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 14px;
+      margin-top: 34px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 150px;
+      padding: 14px 22px;
+      border: 1px solid var(--border);
+      color: var(--white);
+      text-decoration: none;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      font-size: 12px;
+      background: rgba(6,18,18,0.68);
+      box-shadow: 0 0 24px rgba(114,255,181,0.09);
+      transition: 0.25s;
+    }
+
+    .btn:hover {
+      border-color: var(--purple);
+      color: var(--soft-purple);
+      box-shadow: 0 0 28px rgba(155,92,255,0.28);
+    }
+
+    .btn.primary {
+      background: linear-gradient(135deg, rgba(114,255,181,0.18), rgba(155,92,255,0.22));
+      color: var(--green);
+    }
+
+    .tv-wrap {
+      position: relative;
+      max-width: 440px;
+      margin-left: auto;
+    }
+
+    .tv {
+      position: relative;
+      aspect-ratio: 4 / 3;
+      border: 18px solid #071313;
+      background: #081818;
+      box-shadow:
+        0 0 0 2px rgba(114,255,181,0.12),
+        0 0 45px rgba(155,92,255,0.18),
+        inset 0 0 55px rgba(0,0,0,0.9);
+      overflow: hidden;
+    }
+
+    .tv::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        repeating-linear-gradient(
+          to bottom,
+          rgba(255,255,255,0.08) 0,
+          rgba(255,255,255,0.08) 2px,
+          transparent 4px,
+          transparent 8px
+        );
+      opacity: 0.2;
+      z-index: 3;
+      animation: scan 0.8s linear infinite;
+    }
+
+    @keyframes scan {
+      from { transform: translateY(-10px); }
+      to { transform: translateY(10px); }
+    }
+
+    .bars {
+      position: absolute;
+      inset: 42px 36px 82px;
+      display: grid;
+      grid-template-columns: 1.1fr 1fr 1fr 1fr;
+      filter: blur(0.3px);
+      animation: signalJump 3.5s infinite;
+    }
+
+    .bars div:nth-child(1) { background: #f6fff6; }
+    .bars div:nth-child(2) { background: #72ffb5; }
+    .bars div:nth-child(3) { background: #9b5cff; }
+    .bars div:nth-child(4) { background: #162625; }
+
+    .mini-bars {
+      position: absolute;
+      left: 36px;
+      right: 36px;
+      bottom: 42px;
+      height: 44px;
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+      gap: 0;
+    }
+
+    .mini-bars div:nth-child(1) { background: #193b38; }
+    .mini-bars div:nth-child(2) { background: #f6fff6; }
+    .mini-bars div:nth-child(3) { background: #315950; }
+    .mini-bars div:nth-child(4) { background: #0d1618; }
+    .mini-bars div:nth-child(5) { background: #442b62; }
+
+    .tv-label {
+      position: absolute;
+      left: 22px;
+      bottom: 14px;
+      color: rgba(246,255,246,0.7);
+      font-size: 10px;
+      letter-spacing: 2px;
+    }
+
+    @keyframes signalJump {
+      0%, 89%, 100% {
+        transform: translate(0, 0);
+      }
+      90% {
+        transform: translate(3px, -2px);
+      }
+      92% {
+        transform: translate(-4px, 2px);
+      }
+      94% {
+        transform: translate(2px, 3px);
+      }
+    }
+
+    section {
+      padding: 76px 0;
+    }
+
+    .section-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      margin-bottom: 28px;
+    }
+
+    .section-title h2 {
+      font-size: clamp(26px, 4vw, 46px);
+      text-transform: uppercase;
+      letter-spacing: -2px;
+    }
+
+    .section-title span {
+      color: var(--green);
+      font-size: 12px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+    }
+
+    .portfolio-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 22px;
+    }
+
+    .product-card {
+      min-height: 310px;
+      padding: 20px;
+      background:
+        linear-gradient(145deg, rgba(6,18,18,0.92), rgba(3,6,7,0.92)),
+        radial-gradient(circle at top right, rgba(155,92,255,0.18), transparent 40%);
+      border: 1px solid var(--border);
+      box-shadow:
+        0 22px 50px rgba(0,0,0,0.34),
+        inset 0 0 28px rgba(114,255,181,0.03);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .product-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(90deg, transparent, rgba(114,255,181,0.06), transparent);
+      transform: translateX(-100%);
+      animation: cardGlow 7s infinite;
+    }
+
+    @keyframes cardGlow {
+      0%, 70% { transform: translateX(-100%); }
+      90%, 100% { transform: translateX(100%); }
+    }
+
+    .product-image {
+      height: 150px;
+      border: 1px dashed rgba(155,92,255,0.32);
+      background:
+        linear-gradient(135deg, rgba(255,255,255,0.035), rgba(114,255,181,0.04)),
+        repeating-linear-gradient(
+          90deg,
+          rgba(255,255,255,0.04) 0,
+          rgba(255,255,255,0.04) 18px,
+          transparent 18px,
+          transparent 36px
+        );
+      margin-bottom: 22px;
+    }
+
+    .blank-line {
+      height: 14px;
+      width: 72%;
+      background: rgba(255,255,255,0.08);
+      margin-bottom: 12px;
+    }
+
+    .blank-line.short {
+      width: 48%;
+      background: rgba(114,255,181,0.12);
+    }
+
+    .blank-line.purple {
+      width: 62%;
+      background: rgba(155,92,255,0.13);
+    }
+
+    .product-link {
+      position: absolute;
+      left: 20px;
+      bottom: 20px;
+      width: 110px;
+      height: 34px;
+      border: 1px solid rgba(114,255,181,0.18);
+      background: rgba(0,0,0,0.25);
+    }
+
+    .about-panel {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      padding: 32px;
+      box-shadow: 0 30px 70px rgba(0,0,0,0.42);
+    }
+
+    .about-panel p {
+      color: #b8cec7;
+      line-height: 1.8;
+      font-size: 14px;
+    }
+
+    .mood-list {
+      display: grid;
+      gap: 12px;
+    }
+
+    .mood-list div {
+      padding: 14px;
+      border: 1px solid rgba(155,92,255,0.22);
+      background: rgba(0,0,0,0.18);
+      color: var(--soft-purple);
+      letter-spacing: 2px;
+      font-size: 12px;
+      text-transform: uppercase;
+    }
+
+    footer {
+      padding: 40px 0;
+      color: var(--muted);
+      font-size: 12px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      border-top: 1px solid rgba(114,255,181,0.14);
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    @media (max-width: 900px) {
+      .hero {
+        grid-template-columns: 1fr;
+        padding: 58px 0;
+      }
+
+      .tv-wrap {
+        margin: 0;
+      }
+
+      .portfolio-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .about-panel {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 620px) {
+      header {
+        align-items: flex-start;
+        gap: 18px;
+        flex-direction: column;
+      }
+
+      nav {
+        flex-wrap: wrap;
+        gap: 14px;
+      }
+
+      .portfolio-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-actions {
+        flex-direction: column;
+      }
+
+      .btn {
+        width: 100%;
+      }
+
+      .section-title {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="city-bg">
+    <div class="building one">
+      <div class="windows">
+        <span></span><span></span><span></span><span></span>
+        <span></span><span></span><span></span><span></span>
+        <span></span><span></span><span></span><span></span>
+      </div>
+    </div>
+
+    <div class="building two">
+      <div class="windows">
+        <span></span><span></span><span></span><span></span>
+        <span></span><span></span><span></span><span></span>
+      </div>
+    </div>
+
+    <div class="building three">
+      <div class="windows">
+        <span></span><span></span><span></span><span></span>
+        <span></span><span></span><span></span><span></span>
+        <span></span><span></span><span></span><span></span>
+      </div>
+    </div>
+
+    <div class="building four">
+      <div class="windows">
+        <span></span><span></span><span></span><span></span>
+      </div>
+    </div>
+
+    <div class="lamp a"></div>
+    <div class="lamp b"></div>
+    <div class="lamp c"></div>
+    <div class="street"></div>
+  </div>
+
+  <main class="page">
+    <header>
+        <a href="#home" class="logo">
+            <img src="xffxr-hours-logo.png" alt="XFFXR Hours logo">
+        </a>
+
+      <nav>
+        <a href="#home">Home</a>
+        <a href="#portfolio">Products</a>
+        <a href="#mood">Mood</a>
+        <a href="#contact">Contact</a>
+      </nav>
+    </header>
+
+    <section class="hero" id="home">
+      <div>
+        <img class="hero-logo" src="xffxr-hours-logo.png" alt="XFFXR Hours logo">
+
+        <h1>Quiet Night<br>Portfolio</h1>
+
+        <p>
+          A dark product portfolio layout with empty-night city mood, flickering lamp posts,
+          green neon glow, purple signal noise, and retro TV color bars.
+        </p>
+
+        <div class="hero-actions">
+          <a class="btn primary" href="#portfolio">View Products</a>
+          <a class="btn" href="#contact">Contact</a>
+        </div>
+      </div>
+
+      <div class="tv-wrap">
+        <div class="tv">
+          <div class="bars">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+          </div>
+
+          <div class="mini-bars">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+          </div>
+
+          <div class="tv-label">NO SIGNAL / PORTFOLIO</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="portfolio">
+      <div class="section-title">
+        <h2>Products</h2>
+        <span>Blank slots ready</span>
+      </div>
+
+      <div class="portfolio-grid">
+        <article class="product-card">
+          <div class="product-image"></div>
+          <!-- Product name here -->
+          <div class="blank-line short"></div>
+          <!-- Product description here -->
+          <div class="blank-line"></div>
+          <div class="blank-line purple"></div>
+          <!-- Product link here -->
+          <a class="product-link" href="#" aria-label="Product link"></a>
+        </article>
+
+        <article class="product-card">
+          <div class="product-image"></div>
+          <!-- Product name here -->
+          <div class="blank-line short"></div>
+          <!-- Product description here -->
+          <div class="blank-line"></div>
+          <div class="blank-line purple"></div>
+          <!-- Product link here -->
+          <a class="product-link" href="#" aria-label="Product link"></a>
+        </article>
+
+        <article class="product-card">
+          <div class="product-image"></div>
+          <!-- Product name here -->
+          <div class="blank-line short"></div>
+          <!-- Product description here -->
+          <div class="blank-line"></div>
+          <div class="blank-line purple"></div>
+          <!-- Product link here -->
+          <a class="product-link" href="#" aria-label="Product link"></a>
+        </article>
+
+        <article class="product-card">
+          <div class="product-image"></div>
+          <!-- Product name here -->
+          <div class="blank-line short"></div>
+          <!-- Product description here -->
+          <div class="blank-line"></div>
+          <div class="blank-line purple"></div>
+          <!-- Product link here -->
+          <a class="product-link" href="#" aria-label="Product link"></a>
+        </article>
+
+        <article class="product-card">
+          <div class="product-image"></div>
+          <!-- Product name here -->
+          <div class="blank-line short"></div>
+          <!-- Product description here -->
+          <div class="blank-line"></div>
+          <div class="blank-line purple"></div>
+          <!-- Product link here -->
+          <a class="product-link" href="#" aria-label="Product link"></a>
+        </article>
+
+        <article class="product-card">
+          <div class="product-image"></div>
+          <!-- Product name here -->
+          <div class="blank-line short"></div>
+          <!-- Product description here -->
+          <div class="blank-line"></div>
+          <div class="blank-line purple"></div>
+          <!-- Product link here -->
+          <a class="product-link" href="#" aria-label="Product link"></a>
+        </article>
+      </div>
+    </section>
+
+    <section id="mood">
+      <div class="section-title">
+        <h2>Visual Mood</h2>
+        <span>Black / Green / Purple</span>
+      </div>
+
+      <div class="about-panel">
+        <p>
+          This section can be replaced later with your brand story, product categories,
+          featured collections, or project background. For now, it keeps the quiet
+          after-hours tone with dark panels, soft neon borders, and VHS-style scan lines.
+        </p>
+
+        <div class="mood-list">
+          <div>Flickering lamp posts</div>
+          <div>Retro TV signal bars</div>
+          <div>Dark empty street atmosphere</div>
+          <div>Green and purple neon glow</div>
+        </div>
+      </div>
+    </section>
+
+    <footer id="contact">
+      <div>© 2026 Product Portfolio</div>
+      <div><!-- Add email / social links here --></div>
+    </footer>
+  </main>
+</body>
+</html>
